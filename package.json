@@ -7,10 +7,16 @@
 	},
 	"dependencies": {
 		"express": "4.13.x",
-		"cfenv": "1.0.x"
+		"cfenv": "1.0.x",
+   		"mongoose": "*",
+   		"morgan":"*",
+   		"mongodb":"*",
+   		"body-parser":"*"
 	},
-	"repository": {},
+	"repository": {
+		
+	},
 	"engines": {
-		"node": "4.x"
-	} 
+		"node": "4.2.x"
+	}
 }
