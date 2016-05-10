@@ -31,7 +31,12 @@ app.use(bodyParser.json());
 //good hello commando
 
 
-app.get('/', function (req, res) {
+app.use(express.static(__dirname + '/public'));
+app.get('/index', function(req, res) {
+    res.sendfile(__dirname + '/public/index.html');
+});
+
+app.get('/how', function (req, res) {
   res.write('Two APIs are provided: "/api/insertMessage" and "/api/render"' + "\n"
     + 'When "/api/insertMessage" is called, messages will be written to database' + "\n"
     + 'When "/api/render" is called, the inserted message will be shown');
