@@ -6,8 +6,6 @@
 * 프로젝트주소 : [http://gomeanjsjs.mybluemix.net/](http://gomeanjsjs.mybluemix.net/)
 * Languages : HTML, Nodejs, MongoDB
 * OPEN API : Google map API
-
-
 * 주로 봐야할 문서
  - [app.js](https://github.com/AndersonChoi/BluemixRestApi/blob/master/app.js) : nodejs가 구동되어지는 가장 최상단 파일
  - [package.json](https://github.com/AndersonChoi/BluemixRestApi/blob/master/package.json) : nodejs가 bluemix상에서 올라가서 실행될 때 참조하는 파일, 특히 npm(Node Packaged Module) 종류가 선언되어 있기 때문에 app.js 나 혹은 다른 nodejs 문서에서 package가 추가될 때 이 파일에서 package를 추가해야 한다.
