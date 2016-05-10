@@ -1,17 +1,9 @@
-This README.md file is displayed on your project page. You should edit this 
-file to describe your project, including instructions for building and 
-running the project, pointers to the license under which you are making the 
-project available, and anything else you think would be useful for others to
-know.
+# IBM Bluemix Rest Api test
 
-We have created an empty license.txt file for you. Well, actually, it says,
-"<Replace this text with the license you've chosen for your project.>" We 
-recommend you edit this and include text for license terms under which you're
-making your code available. A good resource for open source licenses is the 
-[Open Source Initiative](http://opensource.org/).
+ 이 프로젝트는 2016년 부산대학교 모바일 LAB 졸업과제를 수행하기 위해 만든 프로젝트 입니다. IBM Bluemix와 연동되어 있으며 REST API를 test하기 위해 만들어졌습니다.
+ 
 
-Be sure to update your project's profile with a short description and 
-eye-catching graphic.
+* 프로젝트주소 : [http://gomeanjsjs.mybluemix.net/](http://gomeanjsjs.mybluemix.net/)
+* 사용된 언어 : HTML, Nodejs, MongoDB
+* 사용된 OPEN API : Google map API
 
-Finally, consider defining some sprints and work items in Track & Plan to give 
-interested developers a sense of your cadence and upcoming enhancements.
