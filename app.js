@@ -1,4 +1,4 @@
-var mongo = process.env.VCAP_SERVICES;
+var mongo = process.env.VCAP_SERVICES; // nodejs environment를 불러와 mongodb와 연결함.
 var port = process.env.PORT || 3030;
 var conn_str = "";
 if (mongo) {
@@ -17,18 +17,18 @@ if (mongo) {
   conn_str = 'mongodb://localhost:27017';
 }
 
-var MongoClient = require('mongodb').MongoClient;
-var db; 
+var MongoClient = require('mongodb').MongoClient; //mongodb client 연결
+var db; //
 MongoClient.connect(conn_str, function(err, database) {
   if(err) throw err;
   db = database;
 }); 
 
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-app.use(bodyParser.json());     
-//good hello commando
+var express = require('express'); // nodejs express module 추가
+var app = express(); 
+var bodyParser = require('body-parser'); // get 으로 호출할 때 body의 내용을 parsing하기 위해 body-parser module 추가
+// var message = req.body; 와 같이 body의 내용(json등)을 가져올 수 있다.
+app.use(bodyParser.json());     //bodyparser로 json 형식을 따른 다는 것을 선언.
 
 
 app.use(express.static(__dirname + '/public'));
