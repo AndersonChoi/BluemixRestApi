@@ -65,10 +65,11 @@ app.get('/api/insertMessage', function (req, res) {
 
 
 app.post('/api/add', function (req, res) {
-	var message = req.body;
-    console.log("messages:" + message);
+	var message = req.body; // json형식의 내용을 post로 가지고와서 body의 내용을 가져옴
+	console.log("messages:" + message);
 	
 	  if (db && db !== "null" && db !== "undefined") {
+	  	//db추가 mongodb의 경우 json형식을 그대로 저장하게 된다.
 	  db.collection('messages').insert(message,  {safe:true}, function(err, cursor) {
 	      if (err) { 
 	          console.log(err.stack);
@@ -89,13 +90,14 @@ app.post('/api/add', function (req, res) {
 
 app.get('/api/render', function (req, res) {
   if (db && db !== "null" && db !== "undefined") {
-    // list messages
+    // mongodb의 messages table에 있는 것을 10개 한도롤 가져온다는 의미이다.
+    //limit, sort와 같이 옵션을 줄 수있다. 이런 옵션은 mongodb 특성이다.
     db.collection('messages').find({}, {limit:10, sort:[['_id', 'desc']]}, function(err, cursor) {
       if (err) {
         console.log(err.stack); 
         res.write('mongodb message list failed');
         res.end();
-      } else {
+      } else {//만약 find하여 에러가 나지 않는 경우 json array로 출력한다.
         cursor.toArray(function(err, items) {
           if (err) {
             console.log(err.stack); 
