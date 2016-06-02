@@ -11,6 +11,7 @@
    		"mongoose": "*",
    		"morgan":"*",
    		"mongodb":"*",
+   		"assert":"*",
    		"body-parser":"*"
 	},
 	"repository": {

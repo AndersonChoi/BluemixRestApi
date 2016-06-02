@@ -1,4 +1,6 @@
-var mongo = process.env.VCAP_SERVICES;
+
+
+/*var mongo = process.env.VCAP_SERVICES;
 var port = process.env.PORT || 3030;
 var conn_str = "";
 if (mongo) {
@@ -22,13 +24,41 @@ var db;
 MongoClient.connect(conn_str, function(err, database) {
   if(err) throw err;
   db = database;
-}); 
+}); */
 
+
+
+var port = process.env.PORT || 3030;
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());     
 //good hello commando
+
+var MONGODB_URL="mongodb://wonyoung:dnjsdud2@aws-us-east-1-portal.11.dblayer.com:28085/bikeDatabase"
+var MongoClient = require('mongodb').MongoClient;
+var assert = require('assert');
+
+var options = {
+    mongos: {
+        ssl: true,
+        sslValidate: false,
+    }
+}
+
+MongoClient.connect(MONGODB_URL, options, function(err, db) {
+    assert.equal(null, err);
+    db.listCollections({}).toArray(function(err, collections) {
+        assert.equal(null, err);
+        collections.forEach(function(collection) {
+            console.log(collection);
+        });
+        db.close();
+        process.exit(0);
+    })
+});
+
+
 
 
 app.use(express.static(__dirname + '/public'));
