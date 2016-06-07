@@ -1,17 +1,12 @@
-This README.md file is displayed on your project page. You should edit this 
-file to describe your project, including instructions for building and 
-running the project, pointers to the license under which you are making the 
-project available, and anything else you think would be useful for others to
-know.
+# IBM Bluemix Rest Api test
 
-We have created an empty license.txt file for you. Well, actually, it says,
-"<Replace this text with the license you've chosen for your project.>" We 
-recommend you edit this and include text for license terms under which you're
-making your code available. A good resource for open source licenses is the 
-[Open Source Initiative](http://opensource.org/).
+ 이 프로젝트는 2016년 부산대학교 모바일 LAB 졸업과제를 수행하기 위해 만든 프로젝트 입니다. IBM Bluemix와 연동되어 있으며 REST API를 test하기 위해 만들어졌습니다.
+ 
 
-Be sure to update your project's profile with a short description and 
-eye-catching graphic.
-
-Finally, consider defining some sprints and work items in Track & Plan to give 
-interested developers a sense of your cadence and upcoming enhancements.
+* 프로젝트주소 : [http://gomeanjsjs.mybluemix.net/](http://gomeanjsjs.mybluemix.net/)
+* Languages : HTML, Nodejs, MongoDB
+* OPEN API : Google map API
+* 주로 봐야할 문서
+ - [app.js](https://github.com/AndersonChoi/BluemixRestApi/blob/master/app.js) : nodejs가 구동되어지는 가장 최상단 파일
+ - [package.json](https://github.com/AndersonChoi/BluemixRestApi/blob/master/package.json) : nodejs가 bluemix상에서 올라가서 실행될 때 참조하는 파일, 특히 npm(Node Packaged Module) 종류가 선언되어 있기 때문에 app.js 나 혹은 다른 nodejs 문서에서 package가 추가될 때 이 파일에서 package를 추가해야 한다.
+ - [index.html](https://github.com/AndersonChoi/BluemixRestApi/blob/master/public/index.html) : 가장 처음에 보이는 html파일(첫화면)

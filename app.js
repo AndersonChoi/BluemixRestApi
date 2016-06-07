@@ -1,67 +1,42 @@
-
-
-/*var mongo = process.env.VCAP_SERVICES;
+var mongo = process.env.VCAP_SERVICES; // nodejs environment를 불러와 mongodb와 연결함.
 var port = process.env.PORT || 3030;
-var conn_str = "";
-if (mongo) {
-  var env = JSON.parse(mongo);
-  if (env['mongodb-2.4']) {
-    mongo = env['mongodb-2.4'][0]['credentials'];
-    if (mongo.url) {
-      conn_str = mongo.url;
-    } else {
-      console.log("No mongo found");
-    }  
+
+
+//lets require/import the mongodb native drivers.
+var mongodb = require('mongodb');
+
+//We need to work with "MongoClient" interface in order to connect to a mongodb server.
+var MongoClient = mongodb.MongoClient;
+
+// Connection URL. This is where your mongodb server is running.
+var url = 'mongodb://wonyoung:dnjsdud1@aws-us-east-1-portal.11.dblayer.com:28085,aws-us-east-1-portal.10.dblayer.com:11361/bikeDatabase';
+
+// Use connect method to connect to the Server
+/*
+MongoClient.connect(url, function (err, db) {
+  if (err) {
+    console.log('Unable to connect to the mongoDB server. Error:', err);
   } else {
-    conn_str = 'mongodb://localhost:27017';
+    //HURRAY!! We are connected. :)
+    console.log('Connection established to', url);
+
+    // do some work here with the database.
+
+    //Close connection
+    db.close();
   }
-} else {
-  conn_str = 'mongodb://localhost:27017';
-}
-
-var MongoClient = require('mongodb').MongoClient;
-var db; 
-MongoClient.connect(conn_str, function(err, database) {
-  if(err) throw err;
-  db = database;
-}); */
-
-
-
-var port = process.env.PORT || 3030;
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-app.use(bodyParser.json());     
-//good hello commando
-
-var MONGODB_URL="mongodb://wonyoung:dnjsdud2@aws-us-east-1-portal.11.dblayer.com:28085/bikeDatabase"
-var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
-
-var options = {
-    mongos: {
-        ssl: true,
-        sslValidate: false,
-    }
-}
-
-MongoClient.connect(MONGODB_URL, options, function(err, db) {
-    assert.equal(null, err);
-    db.listCollections({}).toArray(function(err, collections) {
-        assert.equal(null, err);
-        collections.forEach(function(collection) {
-            console.log(collection);
-        });
-        db.close();
-        process.exit(0);
-    })
-});
+});*/
 
 
 
 
+var express = require('express'); // nodejs express module 추가
+var app = express(); 
+var bodyParser = require('body-parser'); // get 으로 호출할 때 body의 내용을 parsing하기 위해 body-parser module 추가
+app.use(bodyParser.json());     //bodyparser로 json 형식을 따른 다는 것을 선언.
 app.use(express.static(__dirname + '/public'));
+
+
 app.get('/index', function(req, res) {
     res.sendfile(__dirname + '/public/index.html');
 });
@@ -73,32 +48,65 @@ app.get('/how', function (req, res) {
   res.end();	
 });
 
-app.get('/api/insertMessage', function (req, res) {
-  var message = { 'message': 'Hello, Bluemix', 'ts': new Date() };
-  if (db && db !== "null" && db !== "undefined") {
-    db.collection('messages').insert(message, {safe:true}, function(err){
-      if (err) { 
-        console.log(err.stack);
-        res.write('mongodb message insert failed');
-        res.end(); 
-      } else {
-        res.write('following messages has been inserted into database' + "\n" 
-        + JSON.stringify(message));
-        res.end();
-      }
-    });    
-  } else {
-    res.write('No mongo found');
-    res.end();
-  } 
-});
 
+
+app.get('/api/insertMessage', function (req, res) {
+	
+	
+
+	// Use connect method to connect to the Server
+	MongoClient.connect(url, function (err, db) {
+	  if (err) {
+	    console.log('Unable to connect to the mongoDB server. Error:', err);
+	  } else {
+	    //HURRAY!! We are connected. :)
+	    console.log('Connection established to', url);
+
+	    
+
+		////// insert start
+	    var message = { 'message': 'Hello, this is BIKE!!!', 'ts': new Date() };
+	    if (db && db !== "null" && db !== "undefined") {
+	      db.collection('bikeDB').insert(message, {safe:true}, function(err){
+	        if (err) { 
+	          console.log(err.stack);
+	          res.write('mongodb message insert failed');
+	          res.end(); 
+	        } else {
+	          res.write('following messages has been inserted into database' + "\n" 
+	          + JSON.stringify(message));
+	          res.end();
+	        }
+	      });    
+	    } else {
+	      res.write('No mongo found');
+	      res.end();
+	    } 
+	    
+	    // insert end.....
+	    
+	    
+	    
+	    
+	    db.close();
+	  }
+	});
+
+	
+	
+	
+  
+  
+  
+});
+/*
 
 app.post('/api/add', function (req, res) {
-	var message = req.body;
-    console.log("messages:" + message);
+	var message = req.body; // json형식의 내용을 post로 가지고와서 body의 내용을 가져옴
+	console.log("messages:" + message);
 	
 	  if (db && db !== "null" && db !== "undefined") {
+	  	//db추가 mongodb의 경우 json형식을 그대로 저장하게 된다.
 	  db.collection('messages').insert(message,  {safe:true}, function(err, cursor) {
 	      if (err) { 
 	          console.log(err.stack);
@@ -116,35 +124,64 @@ app.post('/api/add', function (req, res) {
 	    } 
 	  });
 
-
+*/
 app.get('/api/render', function (req, res) {
-  if (db && db !== "null" && db !== "undefined") {
-    // list messages
-    db.collection('messages').find({}, {limit:10, sort:[['_id', 'desc']]}, function(err, cursor) {
-      if (err) {
-        console.log(err.stack); 
-        res.write('mongodb message list failed');
-        res.end();
-      } else {
-        cursor.toArray(function(err, items) {
-          if (err) {
-            console.log(err.stack); 
-            res.write('mongodb cursor to array failed');
-            res.end();
-          } else {
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            for (i=0; i < items.length; i++) {
-              res.write(JSON.stringify(items[i]) + "\n");
-            }
-            res.end();
-          }
-        });
-      }
-    });     
-  } else {
-    res.write('No mongo found');
-    res.end();  
-  }
+	
+	
+
+	MongoClient.connect(url, function (err, db) {
+	  if (err) {
+	    console.log('Unable to connect to the mongoDB server. Error:', err);
+	  } else {
+	    console.log('Connection established to', url);
+
+		
+	    if (db && db !== "null" && db !== "undefined") {
+	      // mongodb의 messages table에 있는 것을 10개 한도롤 가져온다는 의미이다.
+	      //limit, sort와 같이 옵션을 줄 수있다. 이런 옵션은 mongodb 특성이다.
+	      db.collection('bikeDB').find({}, {limit:10, sort:[['_id', 'desc']]}, function(err, cursor) {
+	        if (err) {
+	          console.log(err.stack); 
+	          res.write('mongodb message list failed');
+	          res.end();
+	        } else {//만약 find하여 에러가 나지 않는 경우 json array로 출력한다.
+	          cursor.toArray(function(err, items) {
+	            if (err) {
+	              console.log(err.stack); 
+	              res.write('mongodb cursor to array failed');
+	              res.end();
+	            } else {
+	              res.writeHead(200, {'Content-Type': 'text/plain'});
+	              for (i=0; i < items.length; i++) {
+	                res.write(JSON.stringify(items[i]) + "\n");
+	              }
+	              res.end();
+	            }
+	          });
+	        }
+	      });     
+	    } else {
+	      res.write('No mongo found');
+	      res.end();  
+	    }
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    db.close();
+	  }
+	});
+	
+	
+	
+  
+  
 });
 
 
