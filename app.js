@@ -174,7 +174,7 @@ app.get('/api/render', function (req, res) {
 	    
 	    
 	    
-	    db.close();
+	    db.close();// 이게 문제가 되고있다.
 	  }
 	});
 	
