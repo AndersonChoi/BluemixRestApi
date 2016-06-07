@@ -61,44 +61,53 @@ app.get('/api/insertMessage', function (req, res) {
 	  } else {
 	    //HURRAY!! We are connected. :)
 	    console.log('Connection established to', url);
-
-	    
-
-		////// insert start
-	    var message = { 'message': 'Hello, this is BIKE!!!', 'ts': new Date() };
-	    if (db && db !== "null" && db !== "undefined") {
-	      db.collection('bikeDB').insert(message, {safe:true}, function(err){
-	        if (err) { 
-	          console.log(err.stack);
-	          res.write('mongodb message insert failed');
-	          res.end(); 
-	        } else {
-	          res.write('following messages has been inserted into database' + "\n" 
-	          + JSON.stringify(message));
-	          res.end();
-	        }
-	      });    
-	    } else {
-	      res.write('No mongo found');
-	      res.end();
-	    } 
-	    
-	    // insert end.....
+	    insertMessage(db,res,function() { 
+           db.close();
+       });
 	    
 	    
-	    
-	    
-	    db.close();
 	  }
 	});
-
-	
-	
-	
-  
-  
-  
 });
+
+function insertMessage(db,res,cb) {
+
+    		////// insert start
+    	    var message = { 'message': 'Hello, this is BIKE!!!', 'ts': new Date() };
+    	    if (db && db !== "null" && db !== "undefined") {
+    	      db.collection('bikeDB').insert(message, {safe:true}, function(err){
+    	        if (err) { 
+    	          console.log(err.stack);
+    	          res.write('mongodb message insert failed');
+    	          res.end(); 
+    	        } else {
+    	          res.write('following messages has been inserted into database' + "\n" 
+    	          + JSON.stringify(message));
+    	          res.end();
+    	        }
+    	           
+    	      });    
+    	     
+    	    } else {
+    	      res.write('No mongo found');
+    	      res.end();
+    	    } 
+    	    
+    	    // insert end.....
+        	
+            cb();
+}
+
+
+
+
+
+
+
+
+
+
+
 /*
 
 app.post('/api/add', function (req, res) {
@@ -158,6 +167,10 @@ app.get('/api/render', function (req, res) {
 	              res.end();
 	            }
 	          });
+	          
+
+	  	    
+	  	    	db.close();// 이게 문제가 되고있다.
 	        }
 	      });     
 	    } else {
@@ -173,8 +186,6 @@ app.get('/api/render', function (req, res) {
 	    
 	    
 	    
-	    
-	    db.close();// 이게 문제가 되고있다.
 	  }
 	});
 	
